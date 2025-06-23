@@ -13,7 +13,9 @@
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "lint": "eslint src --ext ts,tsx",
     "type-check": "tsc --noEmit",
-    "example": "cd example && npm run dev"
+    "example": "cd example && npm run dev",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "keywords": [
     "mantine",
@@ -47,7 +49,15 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "tsup": "^8.4.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "@storybook/addon-essentials": "^8.5.1",
+    "@storybook/addon-interactions": "^8.5.1",
+    "@storybook/addon-links": "^8.5.1",
+    "@storybook/blocks": "^8.5.1",
+    "@storybook/react": "^8.5.1",
+    "@storybook/react-vite": "^8.5.1",
+    "@storybook/test": "^8.5.1",
+    "storybook": "^8.5.1"
   },
   "repository": {
     "type": "git",

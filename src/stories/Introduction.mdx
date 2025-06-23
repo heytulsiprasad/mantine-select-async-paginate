@@ -1,0 +1,136 @@
+import { Meta } from '@storybook/blocks';
+import { Title, Subtitle, Description, Primary, Controls, Stories } from '@storybook/blocks';
+
+<Meta title="Introduction" />
+
+# Mantine Select Async Paginate
+
+A powerful async paginate select component for [Mantine UI](https://mantine.dev/) that provides a seamless experience for loading and selecting from large datasets.
+
+## Features
+
+- 🔄 **Async data loading** with built-in pagination
+- 🔍 **Debounced search** to reduce API calls
+- 📜 **Infinite scroll** for seamless user experience
+- 💾 **Optional caching** for better performance
+- 🎨 **Full Mantine theming** support
+- 📱 **Responsive** and accessible by default
+- 🔒 **TypeScript** support out of the box
+- ⚡ **Lightweight** with minimal dependencies
+
+## Installation
+
+```bash
+npm install mantine-select-async-paginate
+# or
+yarn add mantine-select-async-paginate
+# or
+pnpm add mantine-select-async-paginate
+```
+
+## Quick Start
+
+```tsx
+import { AsyncPaginateSelect } from 'mantine-select-async-paginate';
+
+function MyComponent() {
+  const [value, setValue] = useState<string | null>(null);
+
+  const loadOptions = async (search, loadedOptions, additional) => {
+    const response = await fetch(
+      `/api/search?q=${search}&page=${additional?.page || 1}`
+    );
+    const data = await response.json();
+
+    return {
+      options: data.items.map(item => ({
+        value: item.id.toString(),
+        label: item.name,
+      })),
+      hasMore: data.hasMore,
+      additional: { page: (additional?.page || 1) + 1 },
+    };
+  };
+
+  return (
+    <AsyncPaginateSelect
+      value={value}
+      onChange={setValue}
+      loadOptions={loadOptions}
+      placeholder="Search..."
+    />
+  );
+}
+```
+
+## Real-World Examples
+
+This Storybook includes several examples using real open-source APIs:
+
+### 📚 JSONPlaceholder Users
+A simple example using JSONPlaceholder's user API with simulated pagination.
+
+### 🎬 Rick and Morty Characters
+Search through all Rick and Morty characters with real pagination from their API.
+
+### 🔴 Pokémon
+Browse through all Pokémon with data from PokéAPI.
+
+### 🌍 Countries
+Search and select from all countries in the world using REST Countries API.
+
+### 📖 Open Library Books
+Search millions of books from Open Library's catalog.
+
+### 💻 GitHub Repositories
+Search GitHub repositories with custom rendering to show stars and descriptions.
+
+## Key Concepts
+
+### The `loadOptions` Function
+
+The heart of the component is the `loadOptions` function:
+
+```typescript
+async function loadOptions(
+  search: string,           // Current search value
+  loadedOptions: ComboboxItem[], // Already loaded options
+  additional?: any          // Additional data (e.g., pagination info)
+): Promise<LoadOptionsResult> {
+  // Your API call here
+  return {
+    options: [],          // Array of { value, label } objects
+    hasMore: false,       // Whether more pages are available
+    additional: {}        // Data to pass to next call
+  };
+}
+```
+
+### Pagination Strategy
+
+The component supports flexible pagination strategies:
+
+- **Page-based**: Use `page` number in additional data
+- **Offset-based**: Use `offset` and `limit`
+- **Cursor-based**: Use cursor tokens
+- **Custom**: Any pagination strategy your API supports
+
+### Performance Optimization
+
+- **Debouncing**: Configurable delay before API calls
+- **Caching**: Optional caching of loaded options
+- **Request cancellation**: Automatic cancellation of outdated requests
+- **Infinite scroll**: Load more data as users scroll
+
+## Migration from react-select-async-paginate
+
+If you're migrating from `react-select-async-paginate`:
+
+1. The `loadOptions` function signature is the same
+2. Replace `AsyncPaginate` with `AsyncPaginateSelect`
+3. Update props to match Mantine's Select API
+4. Enjoy better performance and Mantine's design system!
+
+## Explore the Stories
+
+Check out the various examples in the sidebar to see the component in action with different APIs and configurations.

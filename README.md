@@ -23,6 +23,28 @@ yarn add mantine-select-async-paginate
 pnpm add mantine-select-async-paginate
 ```
 
+## Storybook
+
+Explore the component with interactive examples:
+
+```bash
+# Clone the repository
+git clone https://github.com/heytulsiprasad/mantine-select-async-paginate.git
+cd mantine-select-async-paginate
+
+# Install dependencies
+npm install
+
+# Run Storybook
+npm run storybook
+```
+
+The Storybook includes:
+- 📚 Real API examples (Rick & Morty, Pokemon, GitHub, etc.)
+- 🎮 Interactive playground to test configurations
+- 📖 Comprehensive documentation
+- 🎨 Various use cases and patterns
+
 ## Requirements
 
 - React 18+
