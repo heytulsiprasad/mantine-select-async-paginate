@@ -1,0 +1,60 @@
+{
+  "name": "mantine-select-async-paginate",
+  "version": "0.1.0",
+  "description": "Async paginate select component for Mantine UI",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "lint": "eslint src --ext ts,tsx",
+    "type-check": "tsc --noEmit",
+    "example": "cd example && npm run dev"
+  },
+  "keywords": [
+    "mantine",
+    "react",
+    "select",
+    "async",
+    "paginate",
+    "infinite-scroll",
+    "combobox"
+  ],
+  "author": "",
+  "license": "MIT",
+  "peerDependencies": {
+    "@mantine/core": ">=7.0.0",
+    "@mantine/hooks": ">=7.0.0",
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@mantine/core": "^7.17.6",
+    "@mantine/hooks": "^7.17.6",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.6",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^3.2.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tsup": "^8.4.2",
+    "typescript": "^5.7.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/mantine-select-async-paginate.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/mantine-select-async-paginate/issues"
+  },
+  "homepage": "https://github.com/yourusername/mantine-select-async-paginate#readme"
+}
