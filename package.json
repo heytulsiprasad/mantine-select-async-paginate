@@ -49,6 +49,7 @@
     "@types/react-dom": "^18.3.6",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "@vitejs/plugin-react": "^4.6.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react": "^7.33.2",
@@ -58,14 +59,15 @@
     "react-dom": "^18.3.1",
     "storybook": "^8.5.1",
     "tsup": "^8.4.2",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "vite": "^6.3.5"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/mantine-select-async-paginate.git"
+    "url": "https://github.com/heytulsiprasad/mantine-select-async-paginate.git"
   },
   "bugs": {
-    "url": "https://github.com/yourusername/mantine-select-async-paginate/issues"
+    "url": "https://github.com/heytulsiprasad/mantine-select-async-paginate/issues"
   },
-  "homepage": "https://github.com/yourusername/mantine-select-async-paginate#readme"
+  "homepage": "https://github.com/heytulsiprasad/mantine-select-async-paginate#readme"
 }

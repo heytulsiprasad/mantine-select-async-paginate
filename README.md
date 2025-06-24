@@ -1,6 +1,17 @@
 # mantine-select-async-paginate
 
+[![Storybook](https://img.shields.io/badge/Storybook-Live_Demo-FF4785?logo=storybook&logoColor=white)](https://mantine-select-async-paginate.vercel.app/)
+[![npm version](https://img.shields.io/npm/v/mantine-select-async-paginate.svg)](https://www.npmjs.com/package/mantine-select-async-paginate)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+
 Async paginate select component for [Mantine UI](https://mantine.dev/). A powerful alternative to `react-select-async-paginate` built specifically for Mantine.
+
+> 🚧 **Note**: This package is currently under active development. APIs may change in future versions.
+
+## 📚 [Live Storybook Demo](https://mantine-select-async-paginate.vercel.app/)
+
+Explore the component with interactive examples, real API integrations, and comprehensive documentation.
 
 ## Features
 
@@ -23,9 +34,9 @@ yarn add mantine-select-async-paginate
 pnpm add mantine-select-async-paginate
 ```
 
-## Storybook
+## Development
 
-Explore the component with interactive examples:
+### Running Storybook Locally
 
 ```bash
 # Clone the repository
@@ -39,11 +50,21 @@ npm install
 npm run storybook
 ```
 
-The Storybook includes:
-- 📚 Real API examples (Rick & Morty, Pokemon, GitHub, etc.)
-- 🎮 Interactive playground to test configurations
-- 📖 Comprehensive documentation
-- 🎨 Various use cases and patterns
+### Storybook Features
+
+Visit the [live Storybook](https://mantine-select-async-paginate.vercel.app/) to explore:
+
+- 📚 **Real API Examples** - Integration with popular APIs:
+  - JSONPlaceholder (Users)
+  - Rick & Morty API (Characters with pagination)
+  - PokéAPI (Pokémon)
+  - REST Countries API
+  - Open Library (Book search)
+  - GitHub API (Repository search)
+- 🎮 **Interactive Playground** - Test all configurations in real-time
+- 📖 **Comprehensive Documentation** - Detailed guides and API reference
+- 🎨 **Use Case Examples** - Various implementation patterns
+- 🔍 **Live Code** - View source code for each example
 
 ## Requirements
 
@@ -243,14 +264,45 @@ If you're migrating from `react-select-async-paginate`:
    - `isLoading` → Handled automatically
    - `menuIsOpen` → Use `dropdownOpened` with controlled state
 
+## Deployment
+
+The Storybook is automatically deployed to Vercel on every push to the main branch. Preview deployments are created for pull requests.
+
+### Setting up your own deployment
+
+1. Fork this repository
+2. Sign up for [Vercel](https://vercel.com)
+3. Import your forked repository
+4. The deployment will use the `vercel.json` configuration automatically
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Roadmap
+
+- [ ] Add more customization options
+- [ ] Support for custom option components
+- [ ] Add virtualization for large datasets
+- [ ] Improve accessibility features
+- [ ] Add more examples and use cases
+
 ## License
 
-MIT
+MIT © [heytulsiprasad](https://github.com/heytulsiprasad)
 
 ## Credits
 
 Inspired by [react-select-async-paginate](https://github.com/vtaits/react-select-async-paginate), built for [Mantine UI](https://mantine.dev/).
+
+---
+
+<p align="center">
+  Made with ❤️ for the Mantine community
+</p>
