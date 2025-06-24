@@ -20,6 +20,9 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const InteractivePlayground: Story = {
+  args: {
+    loadOptions: async () => ({ options: [], hasMore: false }),
+  },
   render: () => {
     const [value, setValue] = useState<string | null>(null);
     const [apiUrl, setApiUrl] = useState('https://rickandmortyapi.com/api/character');
@@ -32,7 +35,7 @@ export const InteractivePlayground: Story = {
     const [withAsterisk, setWithAsterisk] = useState(false);
     const [error, setError] = useState('');
     
-    const loadOptions = async (search: string, loadedOptions: any[], additional?: any) => {
+    const loadOptions = async (search: string, _loadedOptions: any[], additional?: any) => {
       const page = additional?.page || 1;
       
       try {

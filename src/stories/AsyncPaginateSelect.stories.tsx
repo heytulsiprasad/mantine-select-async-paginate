@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Container, Stack, Text, Code, Paper, Badge, Group } from '@mantine/core';
 import { AsyncPaginateSelect } from '../AsyncPaginateSelect';
-import { LoadOptionsResult } from '../types';
 
 const meta = {
   title: 'Components/AsyncPaginateSelect',
@@ -36,10 +35,6 @@ const meta = {
       control: 'boolean',
       description: 'Whether the select can be cleared',
     },
-    searchable: {
-      control: 'boolean',
-      description: 'Whether the select is searchable (always true for async)',
-    },
     debounceTimeout: {
       control: 'number',
       description: 'Debounce timeout in milliseconds',
@@ -52,6 +47,13 @@ const meta = {
       control: 'boolean',
       description: 'Whether to cache loaded options',
     },
+    loadOptions: {
+      control: false,
+      description: 'Function to load options asynchronously',
+    },
+  },
+  args: {
+    loadOptions: async () => ({ options: [], hasMore: false }),
   },
 } satisfies Meta<typeof AsyncPaginateSelect>;
 
@@ -80,14 +82,14 @@ const SelectWrapper = ({ children, showValue = true }: any) => {
 
 // Basic example with mock data
 export const Basic: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             // Simulate API delay
             await new Promise((resolve) => setTimeout(resolve, 500));
             
@@ -128,14 +130,14 @@ export const Basic: Story = {
 
 // JSONPlaceholder Users API
 export const JSONPlaceholderUsers: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             const page = additional?.page || 1;
             const limit = 10;
             
@@ -181,14 +183,14 @@ export const JSONPlaceholderUsers: Story = {
 
 // Rick and Morty Characters API
 export const RickAndMortyCharacters: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             const page = additional?.page || 1;
             
             const url = new URL('https://rickandmortyapi.com/api/character');
@@ -236,14 +238,14 @@ export const RickAndMortyCharacters: Story = {
 
 // Pokemon API
 export const PokemonAPI: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             const offset = additional?.offset || 0;
             const limit = 20;
             
@@ -294,14 +296,14 @@ export const PokemonAPI: Story = {
 
 // Countries REST API
 export const CountriesAPI: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             const page = additional?.page || 1;
             const pageSize = 20;
             
@@ -358,14 +360,14 @@ export const CountriesAPI: Story = {
 
 // Open Library Books API
 export const OpenLibraryBooks: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             if (!search || search.length < 3) {
               return { options: [], hasMore: false };
             }
@@ -410,7 +412,7 @@ export const OpenLibraryBooks: Story = {
 
 // GitHub Repositories with custom render
 export const GitHubRepositories: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
@@ -434,7 +436,7 @@ export const GitHubRepositories: Story = {
               )}
             </Group>
           )}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (search, _loadedOptions, additional) => {
             if (!search) {
               return { options: [], hasMore: false };
             }
@@ -481,14 +483,14 @@ export const GitHubRepositories: Story = {
 
 // Error handling example
 export const WithErrorHandling: Story = {
-  render: (args) => (
+  render: (args: any) => (
     <SelectWrapper>
       {({ value, onChange }: any) => (
         <AsyncPaginateSelect
           {...args}
           value={value}
           onChange={onChange}
-          loadOptions={async (search, loadedOptions, additional) => {
+          loadOptions={async (_, _loadedOptions, additional) => {
             // Simulate random errors
             if (Math.random() > 0.7) {
               throw new Error('Random API error occurred!');

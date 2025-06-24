@@ -13,7 +13,7 @@ export type LoadOptionsFunction<Additional = any> = (
 ) => Promise<LoadOptionsResult<Additional>>;
 
 export interface AsyncPaginateSelectProps<Additional = any>
-  extends Omit<SelectProps, 'data' | 'searchable'> {
+  extends Omit<SelectProps, 'data' | 'searchable' | 'onChange'> {
   // Core async pagination props
   loadOptions: LoadOptionsFunction<Additional>;
   
@@ -36,6 +36,9 @@ export interface AsyncPaginateSelectProps<Additional = any>
   
   // Minimum search length to trigger loading
   minSearchLength?: number;
+  
+  // Override onChange to ensure proper typing
+  onChange?: (value: string | null, option: ComboboxItem | null) => void;
 }
 
 export interface OptionsCache {

@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useRef } from 'react';
+import { forwardRef, useCallback, useEffect, useRef } from 'react';
 import {
   Select,
   SelectProps,
@@ -27,15 +27,15 @@ export const AsyncPaginateSelect = forwardRef<
       loadMoreText = 'Load more...',
       minSearchLength = 0,
       value,
-      onChange,
       onDropdownOpen,
       onDropdownClose,
       renderOption,
+      onChange,
       ...rest
     },
     ref
   ) => {
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
     const {
       options,
       loading,
@@ -43,7 +43,6 @@ export const AsyncPaginateSelect = forwardRef<
       hasMore,
       loadMore,
       handleSearch,
-      clearCache,
     } = useAsyncOptions({
       loadOptions,
       defaultOptions,
@@ -99,7 +98,7 @@ export const AsyncPaginateSelect = forwardRef<
 
     // Custom render option
     const customRenderOption: SelectProps['renderOption'] = useCallback(
-      ({ option, ...others }) => {
+      ({ option, ...others }: { option: ComboboxItem; [key: string]: any }) => {
         if (option.value === '__loading__') {
           return (
             <Group gap="xs" {...others}>
@@ -150,7 +149,9 @@ export const AsyncPaginateSelect = forwardRef<
         if (val === '__loading__' || val === '__load_more__') {
           return;
         }
-        onChange?.(val, option);
+        if (onChange) {
+          onChange(val, option);
+        }
       },
       [onChange]
     );
@@ -173,8 +174,8 @@ export const AsyncPaginateSelect = forwardRef<
         onSearchChange={handleSearch}
         nothingFoundMessage={nothingFoundMessage}
         renderOption={customRenderOption}
-        onDropdownOpen={(event) => {
-          onDropdownOpen?.(event);
+        onDropdownOpen={() => {
+          onDropdownOpen?.();
           // Set ref to dropdown when it opens
           setTimeout(() => {
             const dropdown = document.querySelector(
@@ -185,8 +186,8 @@ export const AsyncPaginateSelect = forwardRef<
             }
           }, 0);
         }}
-        onDropdownClose={(event) => {
-          onDropdownClose?.(event);
+        onDropdownClose={() => {
+          onDropdownClose?.();
           dropdownRef.current = null;
         }}
         rightSection={loading && options.length === 0 ? <Loader size="xs" /> : undefined}
