@@ -1,6 +1,6 @@
 # mantine-select-async-paginate
 
-[![Storybook](https://img.shields.io/badge/Storybook-Live_Demo-FF4785?logo=storybook&logoColor=white)](https://mantine-select-async-paginate.vercel.app/)
+[![Storybook](https://img.shields.io/badge/Storybook-Live_Demo-FF4785?logo=storybook&logoColor=white)](https://mantine-select-async-paginate-tulsi-prasads-projects.vercel.app/)
 [![npm version](https://img.shields.io/npm/v/mantine-select-async-paginate.svg)](https://www.npmjs.com/package/mantine-select-async-paginate)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
@@ -9,7 +9,7 @@ Async paginate select component for [Mantine UI](https://mantine.dev/). A powerf
 
 > 🚧 **Note**: This package is currently under active development. APIs may change in future versions.
 
-## 📚 [Live Storybook Demo](https://mantine-select-async-paginate.vercel.app/)
+## 📚 [Live Storybook Demo](https://mantine-select-async-paginate-tulsi-prasads-projects.vercel.app/)
 
 Explore the component with interactive examples, real API integrations, and comprehensive documentation.
 
@@ -52,7 +52,7 @@ npm run storybook
 
 ### Storybook Features
 
-Visit the [live Storybook](https://mantine-select-async-paginate.vercel.app/) to explore:
+Visit the [live Storybook](https://mantine-select-async-paginate-tulsi-prasads-projects.vercel.app/) to explore:
 
 - 📚 **Real API Examples** - Integration with popular APIs:
   - JSONPlaceholder (Users)

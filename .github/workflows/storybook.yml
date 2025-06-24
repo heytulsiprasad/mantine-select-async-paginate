@@ -31,3 +31,7 @@ jobs:
           vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
           working-directory: ./
+        # Required GitHub Secrets:
+        # VERCEL_TOKEN: Your Vercel API token from https://vercel.com/account/tokens
+        # VERCEL_ORG_ID: team_UF4kXugIfOo52wyiHsd3bElI
+        # VERCEL_PROJECT_ID: prj_MNlGEMAu2Aws6CSbOmN0VgLYL5U5
