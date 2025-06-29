@@ -35,8 +35,8 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@mantine/core": "^7.17.6",
-    "@mantine/hooks": "^7.17.6",
+    "@mantine/core": "^7.17.8",
+    "@mantine/hooks": "^7.17.8",
     "@storybook/addon-essentials": "^8.5.1",
     "@storybook/addon-interactions": "^8.5.1",
     "@storybook/addon-links": "^8.5.1",
@@ -69,5 +69,5 @@
   "bugs": {
     "url": "https://github.com/heytulsiprasad/mantine-select-async-paginate/issues"
   },
-  "homepage": "https://github.com/heytulsiprasad/mantine-select-async-paginate#readme"
+  "homepage": "https://mantine-select-async-paginate-docs.vercel.app/"
 }
