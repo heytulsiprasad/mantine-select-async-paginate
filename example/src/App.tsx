@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Container, Title, Stack, Text, Code, Paper, Group, Button } from '@mantine/core';
-import { AsyncPaginateSelect, LoadOptionsResult } from 'mantine-select-async-paginate';
+import { AsyncPaginateSelect, AsyncPaginateMultiSelect, LoadOptionsResult } from 'mantine-select-async-paginate';
 
 // Mock API function
 const mockApi = async (
@@ -38,6 +38,9 @@ const mockApi = async (
 function App() {
   const [value, setValue] = useState<string | null>(null);
   const [githubValue, setGithubValue] = useState<string | null>(null);
+  const [multiValue, setMultiValue] = useState<string[]>([]);
+  const [multiGithubValue, setMultiGithubValue] = useState<string[]>([]);
+  const [multipleMode, setMultipleMode] = useState<string[]>([]);
 
   // Basic example - load options function
   const loadOptions = async (
@@ -78,7 +81,7 @@ function App() {
     return {
       options: data.items.map((repo: any) => ({
         value: repo.id.toString(),
-        label: repo.full_name,
+        label: `${repo.full_name} (⭐ ${repo.stargazers_count})`,
       })),
       hasMore: data.total_count > currentPage * 10,
       additional: { page: currentPage + 1 },
@@ -142,16 +145,103 @@ function App() {
 
         <Paper shadow="sm" p="lg" withBorder>
           <Stack gap="md">
+            <Title order={3}>Multi-Select Basic Example</Title>
+            <Text size="sm" c="dimmed">
+              Select multiple options with pagination
+            </Text>
+            <AsyncPaginateMultiSelect
+              label="Select multiple options"
+              placeholder="Search and select multiple..."
+              value={multiValue}
+              onChange={setMultiValue}
+              loadOptions={loadOptions}
+              defaultOptions
+              cacheOptions
+              clearable
+              maxSelectedValues={5}
+              excludeSelected={true}
+            />
+            {multiValue.length > 0 && (
+              <Text size="sm">
+                Selected values ({multiValue.length}): <Code>{multiValue.join(', ')}</Code>
+              </Text>
+            )}
+          </Stack>
+        </Paper>
+
+        <Paper shadow="sm" p="lg" withBorder>
+          <Stack gap="md">
+            <Title order={3}>Multi-Select GitHub Repositories</Title>
+            <Text size="sm" c="dimmed">
+              Select multiple GitHub repositories
+            </Text>
+            <AsyncPaginateMultiSelect
+              label="Select multiple repositories"
+              placeholder="Search and select multiple repositories..."
+              value={multiGithubValue}
+              onChange={setMultiGithubValue}
+              loadOptions={loadGithubRepos}
+              minSearchLength={2}
+              clearable
+              maxSelectedValues={3}
+              excludeSelected={true}
+              onLoadMore={() => console.log('Loading more repositories...')}
+            />
+            {multiGithubValue.length > 0 && (
+              <Text size="sm">
+                Selected repositories ({multiGithubValue.length}): <Code>{multiGithubValue.join(', ')}</Code>
+              </Text>
+            )}
+          </Stack>
+        </Paper>
+
+        <Paper shadow="sm" p="lg" withBorder>
+          <Stack gap="md">
+            <Title order={3}>Single Component with Multiple Prop</Title>
+            <Text size="sm" c="dimmed">
+              Using the single component with multiple prop
+            </Text>
+            <AsyncPaginateSelect
+              multiple={true}
+              label="Multiple mode with single component"
+              placeholder="Search and select multiple..."
+              value={multipleMode}
+              onChange={setMultipleMode}
+              loadOptions={loadOptions}
+              defaultOptions
+              cacheOptions
+              clearable
+              maxSelectedValues={4}
+              excludeSelected={true}
+              onLoadMore={() => console.log('Loading more options...')}
+            />
+            {multipleMode.length > 0 && (
+              <Text size="sm">
+                Selected values ({multipleMode.length}): <Code>{multipleMode.join(', ')}</Code>
+              </Text>
+            )}
+          </Stack>
+        </Paper>
+
+        <Paper shadow="sm" p="lg" withBorder>
+          <Stack gap="md">
             <Title order={3}>Features</Title>
             <ul>
-              <li>Async data loading with pagination</li>
-              <li>Debounced search input</li>
-              <li>Infinite scroll support</li>
-              <li>Caching for better performance</li>
-              <li>Loading states</li>
-              <li>Error handling</li>
-              <li>TypeScript support</li>
-              <li>All Mantine Select props supported</li>
+              <li>✅ Async data loading with pagination</li>
+              <li>✅ Debounced search input</li>
+              <li>✅ Infinite scroll support</li>
+              <li>✅ Caching for better performance</li>
+              <li>✅ Loading states</li>
+              <li>✅ Error handling</li>
+              <li>✅ TypeScript support</li>
+              <li>✅ All Mantine Select/MultiSelect props supported</li>
+              <li>🆕 Multi-select functionality (dedicated component)</li>
+              <li>🆕 Multiple prop support on single component</li>
+              <li>🆕 Max selected values limit</li>
+              <li>🆕 Exclude selected options from dropdown</li>
+              <li>🆕 onLoadMore callback</li>
+              <li>🆕 Custom option rendering</li>
+              <li>🆕 Better TypeScript generics</li>
             </ul>
           </Stack>
         </Paper>
@@ -159,26 +249,35 @@ function App() {
         <Paper shadow="sm" p="lg" withBorder>
           <Stack gap="md">
             <Title order={3}>Usage</Title>
-            <Code block>{`import { AsyncPaginateSelect } from 'mantine-select-async-paginate';
+            <Code block>{`import { 
+  AsyncPaginateSelect, 
+  AsyncPaginateMultiSelect 
+} from 'mantine-select-async-paginate';
 
-const loadOptions = async (search, loadedOptions, additional) => {
-  const response = await fetch(\`/api/search?q=\${search}&page=\${additional?.page || 1}\`);
-  const data = await response.json();
-  
-  return {
-    options: data.items.map(item => ({
-      value: item.id,
-      label: item.name
-    })),
-    hasMore: data.hasMore,
-    additional: { page: (additional?.page || 1) + 1 }
-  };
-};
-
+// Single Select
 <AsyncPaginateSelect
   loadOptions={loadOptions}
   defaultOptions
   cacheOptions
+  onLoadMore={() => console.log('Loading more...')}
+/>
+
+// Multi Select (dedicated component)
+<AsyncPaginateMultiSelect
+  value={selectedValues}
+  onChange={setSelectedValues}
+  loadOptions={loadOptions}
+  maxSelectedValues={5}
+  excludeSelected={true}
+/>
+
+// Multi Select (using multiple prop)
+<AsyncPaginateSelect
+  multiple={true}
+  value={selectedValues}
+  onChange={setSelectedValues}
+  loadOptions={loadOptions}
+  maxSelectedValues={3}
 />`}</Code>
           </Stack>
         </Paper>

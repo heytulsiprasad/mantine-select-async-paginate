@@ -1,9 +1,7 @@
 import { forwardRef, useCallback, useEffect, useRef } from 'react';
 import {
-  Select,
   MultiSelect,
-  SelectProps,
-  MultiSelectProps as MantineMultiSelectProps,
+  MultiSelectProps,
   ComboboxItem,
   Loader,
   Text,
@@ -11,11 +9,11 @@ import {
   Box,
 } from '@mantine/core';
 import { useAsyncOptions } from './hooks/useAsyncOptions';
-import { AsyncPaginateSelectProps } from './types';
+import { AsyncPaginateMultiSelectProps } from './types';
 
-export const AsyncPaginateSelect = forwardRef<
+export const AsyncPaginateMultiSelect = forwardRef<
   HTMLInputElement,
-  AsyncPaginateSelectProps
+  AsyncPaginateMultiSelectProps
 >(
   (
     {
@@ -34,7 +32,6 @@ export const AsyncPaginateSelect = forwardRef<
       renderOption,
       onChange,
       onLoadMore,
-      multiple = false,
       maxSelectedValues,
       excludeSelected = true,
       ...rest
@@ -82,12 +79,12 @@ export const AsyncPaginateSelect = forwardRef<
       return () => dropdown.removeEventListener('scroll', handleScroll);
     }, [handleScroll]);
 
-    // Filter out selected options if excludeSelected is true and in multiple mode
-    const filteredOptions = multiple && excludeSelected && Array.isArray(value)
+    // Filter out selected options if excludeSelected is true
+    const filteredOptions = excludeSelected && value
       ? options.filter(option => !value.includes(option.value))
       : options;
 
-    // Prepare data for Select/MultiSelect component
+    // Prepare data for MultiSelect component
     const selectData: ComboboxItem[] = [...filteredOptions];
 
     // Add loading indicator at the end
@@ -109,7 +106,7 @@ export const AsyncPaginateSelect = forwardRef<
     }
 
     // Custom render option
-    const customRenderOption: SelectProps['renderOption'] | MantineMultiSelectProps['renderOption'] = useCallback(
+    const customRenderOption: MultiSelectProps['renderOption'] = useCallback(
       ({ option, ...others }: { option: ComboboxItem; [key: string]: any }) => {
         if (option.value === '__loading__') {
           return (
@@ -157,34 +154,20 @@ export const AsyncPaginateSelect = forwardRef<
 
     // Handle option selection
     const handleChange = useCallback(
-      (val: string | null | string[], option?: ComboboxItem | null) => {
-        if (multiple) {
-          // Handle multi-select
-          const values = val as string[];
-          // Filter out special options
-          const cleanValues = values.filter(v => v !== '__loading__' && v !== '__load_more__');
-          
-          // Respect maxSelectedValues limit
-          const finalValues = maxSelectedValues 
-            ? cleanValues.slice(0, maxSelectedValues)
-            : cleanValues;
-          
-          if (onChange) {
-            (onChange as (value: string[]) => void)(finalValues);
-          }
-        } else {
-          // Handle single select
-          const singleVal = val as string | null;
-          // Ignore special options
-          if (singleVal === '__loading__' || singleVal === '__load_more__') {
-            return;
-          }
-          if (onChange) {
-            (onChange as (value: string | null, option: ComboboxItem | null) => void)(singleVal, option || null);
-          }
+      (val: string[]) => {
+        // Filter out special options
+        const cleanValues = val.filter(v => v !== '__loading__' && v !== '__load_more__');
+        
+        // Respect maxSelectedValues limit
+        const finalValues = maxSelectedValues 
+          ? cleanValues.slice(0, maxSelectedValues)
+          : cleanValues;
+        
+        if (onChange) {
+          onChange(finalValues);
         }
       },
-      [onChange, multiple, maxSelectedValues]
+      [onChange, maxSelectedValues]
     );
 
     // Show loading state in dropdown if no options loaded yet
@@ -194,50 +177,13 @@ export const AsyncPaginateSelect = forwardRef<
       ? error.message
       : noOptionsMessage;
 
-    // Check if max selections reached (for multi-select mode)
-    const isMaxReached = multiple && maxSelectedValues && Array.isArray(value) && value.length >= maxSelectedValues;
+    // Check if max selections reached
+    const isMaxReached = maxSelectedValues && value && value.length >= maxSelectedValues;
 
-    if (multiple) {
-      const multiSelectRest = rest as Omit<MantineMultiSelectProps, 'data' | 'searchable' | 'onChange' | 'value'>;
-      return (
-        <MultiSelect
-          ref={ref}
-          value={(value as string[]) || []}
-          onChange={handleChange}
-          data={selectData}
-          searchable
-          searchValue={undefined}
-          onSearchChange={handleSearch}
-          nothingFoundMessage={nothingFoundMessage}
-          renderOption={customRenderOption}
-          disabled={isMaxReached || multiSelectRest.disabled}
-          onDropdownOpen={() => {
-            onDropdownOpen?.();
-            // Set ref to dropdown when it opens
-            setTimeout(() => {
-              const dropdown = document.querySelector(
-                '.mantine-MultiSelect-dropdown'
-              ) as HTMLDivElement;
-              if (dropdown) {
-                dropdownRef.current = dropdown;
-              }
-            }, 0);
-          }}
-          onDropdownClose={() => {
-            onDropdownClose?.();
-            dropdownRef.current = null;
-          }}
-          rightSection={loading && options.length === 0 ? <Loader size="xs" /> : undefined}
-          {...multiSelectRest}
-        />
-      );
-    }
-
-    const selectRest = rest as Omit<SelectProps, 'data' | 'searchable' | 'onChange' | 'value'>;
     return (
-      <Select
+      <MultiSelect
         ref={ref}
-        value={value as string | null}
+        value={value || []}
         onChange={handleChange}
         data={selectData}
         searchable
@@ -245,12 +191,13 @@ export const AsyncPaginateSelect = forwardRef<
         onSearchChange={handleSearch}
         nothingFoundMessage={nothingFoundMessage}
         renderOption={customRenderOption}
+        disabled={isMaxReached || rest.disabled}
         onDropdownOpen={() => {
           onDropdownOpen?.();
           // Set ref to dropdown when it opens
           setTimeout(() => {
             const dropdown = document.querySelector(
-              '.mantine-Select-dropdown'
+              '.mantine-MultiSelect-dropdown'
             ) as HTMLDivElement;
             if (dropdown) {
               dropdownRef.current = dropdown;
@@ -262,10 +209,10 @@ export const AsyncPaginateSelect = forwardRef<
           dropdownRef.current = null;
         }}
         rightSection={loading && options.length === 0 ? <Loader size="xs" /> : undefined}
-        {...selectRest}
+        {...rest}
       />
     );
   }
 );
 
-AsyncPaginateSelect.displayName = 'AsyncPaginateSelect';
+AsyncPaginateMultiSelect.displayName = 'AsyncPaginateMultiSelect';

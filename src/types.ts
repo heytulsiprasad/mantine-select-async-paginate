@@ -12,8 +12,8 @@ export type LoadOptionsFunction<Additional = any> = (
   additional?: Additional
 ) => Promise<LoadOptionsResult<Additional>>;
 
-export interface AsyncPaginateSelectProps<Additional = any>
-  extends Omit<SelectProps, 'data' | 'searchable' | 'onChange'> {
+// Base props shared between single and multi-select
+interface BaseAsyncPaginateProps<Additional = any> {
   // Core async pagination props
   loadOptions: LoadOptionsFunction<Additional>;
   
@@ -37,8 +37,43 @@ export interface AsyncPaginateSelectProps<Additional = any>
   // Minimum search length to trigger loading
   minSearchLength?: number;
   
-  // Override onChange to ensure proper typing
+  // Callbacks
+  onLoadMore?: () => void;
+  
+  // Multi-select specific props
+  maxSelectedValues?: number;
+  excludeSelected?: boolean;
+}
+
+// Single select props
+interface SingleSelectProps<Additional = any>
+  extends Omit<SelectProps, 'data' | 'searchable' | 'onChange' | 'multiple'>,
+    BaseAsyncPaginateProps<Additional> {
+  multiple?: false;
+  value?: string | null;
   onChange?: (value: string | null, option: ComboboxItem | null) => void;
+}
+
+// Multi select props
+interface MultiSelectProps<Additional = any>
+  extends Omit<import('@mantine/core').MultiSelectProps, 'data' | 'searchable' | 'onChange'>,
+    BaseAsyncPaginateProps<Additional> {
+  multiple: true;
+  value?: string[];
+  onChange?: (value: string[]) => void;
+}
+
+// Union type for the main component
+export type AsyncPaginateSelectProps<Additional = any> = 
+  | SingleSelectProps<Additional> 
+  | MultiSelectProps<Additional>;
+
+// Dedicated multi-select component props
+export interface AsyncPaginateMultiSelectProps<Additional = any>
+  extends Omit<import('@mantine/core').MultiSelectProps, 'data' | 'searchable' | 'onChange'>,
+    BaseAsyncPaginateProps<Additional> {
+  value?: string[];
+  onChange?: (value: string[]) => void;
 }
 
 export interface OptionsCache {
