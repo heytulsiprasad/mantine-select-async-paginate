@@ -1,6 +1,6 @@
 {
   "name": "mantine-select-async-paginate",
-  "version": "0.1.3",
+  "version": "0.2.0",
   "description": "Async paginate select component for Mantine UI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
@@ -34,10 +34,12 @@
     "mantine",
     "react",
     "select",
+    "multiselect",
     "async",
     "paginate",
     "infinite-scroll",
-    "combobox"
+    "combobox",
+    "typescript"
   ],
   "author": "",
   "license": "MIT",
