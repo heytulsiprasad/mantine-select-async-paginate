@@ -70,7 +70,8 @@ Visit the [live Storybook](https://mantine-select-async-paginate-tulsi-prasads-p
 ## Requirements
 
 - React 18+
-- Mantine 7.0+
+- Mantine 7.0+ or 8.0+
+- Your app must be wrapped with `MantineProvider`
 
 ## Basic Usage
 
@@ -285,6 +286,32 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
+
+## Troubleshooting
+
+### MantineProvider Error
+
+If you see the error: `@mantine/core: MantineProvider was not found in component tree`, ensure:
+
+1. Your app is wrapped with `MantineProvider`:
+   ```tsx
+   import { MantineProvider } from '@mantine/core';
+
+   function App() {
+     return (
+       <MantineProvider>
+         {/* Your app components */}
+       </MantineProvider>
+     );
+   }
+   ```
+
+2. You have consistent versions of `@mantine/*` packages. Check with:
+   ```bash
+   npm list @mantine/core @mantine/hooks
+   ```
+
+3. If using a monorepo, ensure all packages use the same Mantine version.
 
 ## Roadmap
 
