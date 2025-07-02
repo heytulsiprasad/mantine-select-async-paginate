@@ -40,18 +40,30 @@ pnpm add mantine-select-async-paginate
 
 ## Development
 
-### Running Storybook Locally
+### Project Setup
+
+This project uses pnpm workspaces with the following structure:
+- Root package: The main library (`mantine-select-async-paginate`)
+- `docs/`: Next.js documentation site
+
+### Running Locally
 
 ```bash
 # Clone the repository
 git clone https://github.com/heytulsiprasad/mantine-select-async-paginate.git
 cd mantine-select-async-paginate
 
-# Install dependencies
-npm install
+# Install dependencies (using pnpm)
+pnpm install
 
-# Run Storybook
-npm run storybook
+# Build the library
+pnpm build
+
+# Run documentation site (port 3003)
+cd docs && pnpm dev
+
+# Or run Storybook
+pnpm storybook
 ```
 
 ### Storybook Features
@@ -362,6 +374,18 @@ If you see the error: `@mantine/core: MantineProvider was not found in component
    ```
 
 3. If using a monorepo, ensure all packages use the same Mantine version.
+
+## Changelog
+
+### v0.2.0 (Latest)
+- ✅ Added visual selection indicators with checkmarks
+- ✅ Selected items now appear at the top of dropdown
+- ✅ Click-to-deselect functionality in dropdown
+- ✅ Improved multi-select UX with `AsyncPaginateMultiSelect` component
+- ✅ Added `maxSelectedValues` prop to limit selections
+- ✅ Added `excludeSelected` prop to hide selected items from dropdown
+- 🔧 Configured pnpm workspace for better development experience
+- 🔧 Fixed Next.js compatibility with transpilePackages
 
 ## Roadmap
 
