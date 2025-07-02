@@ -94,8 +94,21 @@ export function ApiExamples() {
     const perPage = 6;
 
     try {
-      const response = await fetch(`https://reqres.in/api/users?page=${currentPage}&per_page=${perPage}`);
+      const response = await fetch(`https://reqres.in/api/users?page=${currentPage}&per_page=${perPage}`, {
+        headers: {
+          'x-api-key': 'reqres-free-v1'
+        }
+      });
       const data = await response.json();
+
+      if (!data.data || !Array.isArray(data.data)) {
+        console.error('ReqRes API error:', data);
+        return {
+          options: [],
+          hasMore: false,
+          additional: { page: currentPage }
+        };
+      }
 
       let filteredUsers = data.data;
       

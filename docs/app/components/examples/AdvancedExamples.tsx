@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Stack, Title, Text, Paper, Group, Code, Alert, Badge, Switch, NumberInput, Textarea } from '@mantine/core';
+import { Stack, Title, Text, Paper, Group, Code, Alert, Badge, Switch, NumberInput } from '@mantine/core';
 import { IconSettings, IconInfoCircle, IconRocket, IconBolt } from '@tabler/icons-react';
 import { AsyncPaginateSelect, AsyncPaginateMultiSelect, LoadOptionsResult } from 'mantine-select-async-paginate';
 
@@ -91,7 +91,7 @@ export function AdvancedExamples() {
     const limit = 10;
 
     try {
-      let url = `https://jsonplaceholder.typicode.com/posts?_start=${currentStart}&_limit=${limit}`;
+      const url = `https://jsonplaceholder.typicode.com/posts?_start=${currentStart}&_limit=${limit}`;
       
       const response = await fetch(url);
       const posts = await response.json();

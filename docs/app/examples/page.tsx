@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { Container, Title, Text, Tabs, Paper, Stack, Code, Group, Badge, Alert } from '@mantine/core';
 import { IconInfoCircle, IconUsers, IconShoppingCart, IconBrandGithub, IconSettings } from '@tabler/icons-react';
 import { BasicExamples } from '../components/examples/BasicExamples';
@@ -8,6 +9,8 @@ import { AdvancedExamples } from '../components/examples/AdvancedExamples';
 import { CustomizationExamples } from '../components/examples/CustomizationExamples';
 
 export default function ExamplesPage() {
+  const [activeTab, setActiveTab] = useState<string | null>('basic');
+
   return (
     <Container size="xl" py="xl">
       <Stack gap="xl">
@@ -44,7 +47,7 @@ export default function ExamplesPage() {
         </Paper>
 
         {/* Tabs with Examples */}
-        <Tabs defaultValue="basic" variant="outline">
+        {/* <Tabs value={activeTab} onChange={setActiveTab} variant="outline">
           <Tabs.List grow>
             <Tabs.Tab value="basic">Basic Examples</Tabs.Tab>
             <Tabs.Tab value="api">API Integration</Tabs.Tab>
@@ -67,7 +70,10 @@ export default function ExamplesPage() {
           <Tabs.Panel value="customization" pt="xl">
             <CustomizationExamples />
           </Tabs.Panel>
-        </Tabs>
+        </Tabs> */}
+
+
+        <BasicExamples />
 
         {/* API Quick Reference */}
         <Paper shadow="sm" p="lg" withBorder>
