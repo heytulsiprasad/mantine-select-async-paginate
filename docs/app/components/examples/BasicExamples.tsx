@@ -33,6 +33,9 @@ export function BasicExamples() {
   const [singleValue, setSingleValue] = useState<string | null>(null);
   const [multiValue, setMultiValue] = useState<string[]>([]);
   const [multipleMode, setMultipleMode] = useState<string[]>([]);
+  
+  // Store the loaded options to map values to labels
+  const [optionsMap, setOptionsMap] = useState<Record<string, string>>({});
 
   // Basic load options function
   const loadOptions = async (
@@ -46,11 +49,20 @@ export function BasicExamples() {
     const currentPage = additional?.page || 0;
     const response = generateMockData(search, currentPage);
 
+    const options = response.data.map((item) => ({
+      value: item.id.toString(),
+      label: item.name,
+    }));
+    
+    // Update the options map with the new options
+    const newOptionsMap = { ...optionsMap };
+    options.forEach(option => {
+      newOptionsMap[option.value] = option.label;
+    });
+    setOptionsMap(newOptionsMap);
+
     return {
-      options: response.data.map((item) => ({
-        value: item.id.toString(),
-        label: item.name,
-      })),
+      options,
       hasMore: response.hasMore,
       additional: { page: currentPage + 1 },
     };
@@ -91,7 +103,7 @@ export function BasicExamples() {
 
           {singleValue && (
             <Alert icon={<IconInfoCircle size="1rem" />} color="green" variant="light">
-              Selected value: <Code>{singleValue}</Code>
+              Selected: <Code>{optionsMap[singleValue] || `Option ${singleValue}`}</Code>
             </Alert>
           )}
 
@@ -150,7 +162,7 @@ const loadOptions = async (search, loadedOptions, additional) => {
 
           {multiValue.length > 0 && (
             <Alert icon={<IconInfoCircle size="1rem" />} color="blue" variant="light">
-              Selected values ({multiValue.length}): <Code>{multiValue.join(', ')}</Code>
+              Selected ({multiValue.length}): <Code>{multiValue.map(v => optionsMap[v] || `Option ${v}`).join(', ')}</Code>
             </Alert>
           )}
 
@@ -197,7 +209,7 @@ const loadOptions = async (search, loadedOptions, additional) => {
 
           {multipleMode.length > 0 && (
             <Alert icon={<IconInfoCircle size="1rem" />} color="violet" variant="light">
-              Selected values ({multipleMode.length}): <Code>{multipleMode.join(', ')}</Code>
+              Selected ({multipleMode.length}): <Code>{multipleMode.map(v => optionsMap[v] || `Option ${v}`).join(', ')}</Code>
             </Alert>
           )}
 

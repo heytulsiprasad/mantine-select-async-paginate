@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useRef } from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import {
   MultiSelect,
   MultiSelectProps,
@@ -7,6 +7,7 @@ import {
   Text,
   Group,
   Box,
+  rem,
 } from '@mantine/core';
 import { useAsyncOptions } from './hooks/useAsyncOptions';
 import { AsyncPaginateMultiSelectProps } from './types';
@@ -39,6 +40,7 @@ export const AsyncPaginateMultiSelect = forwardRef<
     ref
   ) => {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const [selectedOptionsMap, setSelectedOptionsMap] = useState<Record<string, ComboboxItem>>({});
     const {
       options,
       loading,
@@ -79,13 +81,42 @@ export const AsyncPaginateMultiSelect = forwardRef<
       return () => dropdown.removeEventListener('scroll', handleScroll);
     }, [handleScroll]);
 
-    // Filter out selected options if excludeSelected is true
-    const filteredOptions = excludeSelected && value
-      ? options.filter(option => !value.includes(option.value))
-      : options;
+    // Update selected options map whenever options change
+    useEffect(() => {
+      const newMap = { ...selectedOptionsMap };
+      options.forEach(option => {
+        newMap[option.value] = option;
+      });
+      setSelectedOptionsMap(newMap);
+    }, [options]);
+
+    // Separate selected and unselected options
+    const selectedOptions: ComboboxItem[] = [];
+    const unselectedOptions: ComboboxItem[] = [];
+
+    options.forEach(option => {
+      if (value && value.includes(option.value)) {
+        selectedOptions.push(option);
+      } else {
+        unselectedOptions.push(option);
+      }
+    });
+
+    // Add any selected values that might not be in current options
+    if (value && value.length > 0) {
+      value.forEach(val => {
+        if (!selectedOptions.find(opt => opt.value === val) && selectedOptionsMap[val]) {
+          selectedOptions.push(selectedOptionsMap[val]);
+        }
+      });
+    }
 
     // Prepare data for MultiSelect component
-    const selectData: ComboboxItem[] = [...filteredOptions];
+    // Always show selected items at the top
+    const selectData: ComboboxItem[] = [
+      ...selectedOptions,
+      ...unselectedOptions
+    ];
 
     // Add loading indicator at the end
     if (loading && options.length > 0) {
@@ -108,6 +139,8 @@ export const AsyncPaginateMultiSelect = forwardRef<
     // Custom render option
     const customRenderOption: MultiSelectProps['renderOption'] = useCallback(
       ({ option, ...others }: { option: ComboboxItem; [key: string]: any }) => {
+        // Manually check if option is selected
+        const isSelected = value?.includes(option.value) || false;
         if (option.value === '__loading__') {
           return (
             <Group gap="xs" {...others}>
@@ -143,13 +176,24 @@ export const AsyncPaginateMultiSelect = forwardRef<
           return renderOption({ option, ...others });
         }
 
+        // Default render with checkmark for selected items
         return (
-          <Text size="sm" {...others}>
-            {option.label}
-          </Text>
+          <Group flex="1" gap="xs" {...others}>
+            <Text size="sm">{option.label}</Text>
+            {isSelected && (
+              <Text
+                size="sm"
+                c="blue"
+                fw={700}
+                style={{ marginInlineStart: 'auto', fontSize: rem(16) }}
+              >
+                ✓
+              </Text>
+            )}
+          </Group>
         );
       },
-      [loadMore, loadingMessage, renderOption, onLoadMore]
+      [loadMore, loadingMessage, renderOption, onLoadMore, value]
     );
 
     // Handle option selection
@@ -208,7 +252,7 @@ export const AsyncPaginateMultiSelect = forwardRef<
           onDropdownClose?.();
           dropdownRef.current = null;
         }}
-        rightSection={loading && options.length === 0 ? <Loader size="xs" /> : undefined}
+        rightSection={loading && options?.length === 0 ? <Loader size="xs" /> : undefined}
         {...rest}
       />
     );

@@ -24,6 +24,9 @@ Explore the component with interactive examples, real API integrations, and comp
 - 📱 **Responsive** and accessible
 - 🔒 **TypeScript** support out of the box
 - ⚡ **Lightweight** with minimal dependencies
+- ✅ **Visual selection indicators** with checkmarks
+- 🎯 **Smart dropdown organization** - selected items appear at top
+- 🚀 **Multi-select support** with dedicated component
 
 ## Installation
 
@@ -125,6 +128,9 @@ The component accepts all props from Mantine's `Select` component, plus:
 | `loadMoreText` | `string` | `"Load more..."` | Text for the load more option |
 | `minSearchLength` | `number` | `0` | Minimum search length to trigger loading |
 | `additional` | `any` | `undefined` | Additional data to pass to loadOptions |
+| `multiple` | `boolean` | `false` | Enable multi-select mode (AsyncPaginateSelect only) |
+| `maxSelectedValues` | `number` | `undefined` | Maximum number of values that can be selected |
+| `excludeSelected` | `boolean` | `true` | Whether to exclude selected options from dropdown |
 
 ### LoadOptionsResult
 
@@ -147,6 +153,50 @@ interface ComboboxItem {
   disabled?: boolean;
 }
 ```
+
+## Multi-Select Support
+
+The package includes dedicated multi-select support with two approaches:
+
+### Using AsyncPaginateMultiSelect Component
+
+```tsx
+import { AsyncPaginateMultiSelect } from 'mantine-select-async-paginate';
+
+function MyMultiSelect() {
+  const [values, setValues] = useState<string[]>([]);
+
+  return (
+    <AsyncPaginateMultiSelect
+      value={values}
+      onChange={setValues}
+      loadOptions={loadOptions}
+      placeholder="Select multiple items..."
+      maxSelectedValues={5}
+      excludeSelected={true} // Hide selected items from dropdown
+    />
+  );
+}
+```
+
+### Using AsyncPaginateSelect with multiple prop
+
+```tsx
+<AsyncPaginateSelect
+  multiple={true}
+  value={values}
+  onChange={setValues}
+  loadOptions={loadOptions}
+  placeholder="Select multiple items..."
+/>
+```
+
+### Enhanced UX Features
+
+- **Selected items at top**: Selected options automatically appear at the top of the dropdown for easy access
+- **Visual indicators**: Selected items show a checkmark (✓) to indicate selection state
+- **Click to deselect**: Simply click on a selected item in the dropdown to remove it
+- **Exclude selected**: Option to hide already selected items from the dropdown
 
 ## Advanced Examples
 

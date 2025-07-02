@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useRef } from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
 import {
   Select,
   MultiSelect,
@@ -9,6 +9,7 @@ import {
   Text,
   Group,
   Box,
+  rem,
 } from '@mantine/core';
 import { useAsyncOptions } from './hooks/useAsyncOptions';
 import { AsyncPaginateSelectProps } from './types';
@@ -42,6 +43,7 @@ export const AsyncPaginateSelect = forwardRef<
     ref
   ) => {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const [selectedOptionsMap, setSelectedOptionsMap] = useState<Record<string, ComboboxItem>>({});
     const {
       options,
       loading,
@@ -82,13 +84,43 @@ export const AsyncPaginateSelect = forwardRef<
       return () => dropdown.removeEventListener('scroll', handleScroll);
     }, [handleScroll]);
 
-    // Filter out selected options if excludeSelected is true and in multiple mode
-    const filteredOptions = multiple && excludeSelected && Array.isArray(value)
-      ? options.filter(option => !value.includes(option.value))
-      : options;
+    // Update selected options map whenever options change
+    useEffect(() => {
+      const newMap = { ...selectedOptionsMap };
+      options.forEach(option => {
+        newMap[option.value] = option;
+      });
+      setSelectedOptionsMap(newMap);
+    }, [options]);
 
-    // Prepare data for Select/MultiSelect component
-    const selectData: ComboboxItem[] = [...filteredOptions];
+    // Separate selected and unselected options for multi-select mode
+    let selectData: ComboboxItem[] = [];
+    
+    if (multiple && Array.isArray(value)) {
+      const selectedOptions: ComboboxItem[] = [];
+      const unselectedOptions: ComboboxItem[] = [];
+
+      options.forEach(option => {
+        if (value.includes(option.value)) {
+          selectedOptions.push(option);
+        } else {
+          unselectedOptions.push(option);
+        }
+      });
+
+      // Add any selected values that might not be in current options
+      value.forEach(val => {
+        if (!selectedOptions.find(opt => opt.value === val) && selectedOptionsMap[val]) {
+          selectedOptions.push(selectedOptionsMap[val]);
+        }
+      });
+
+      // Always show selected items at the top
+      selectData = [...selectedOptions, ...unselectedOptions];
+    } else {
+      // For single select, just use options as is
+      selectData = [...options];
+    }
 
     // Add loading indicator at the end
     if (loading && options.length > 0) {
@@ -111,6 +143,8 @@ export const AsyncPaginateSelect = forwardRef<
     // Custom render option
     const customRenderOption: SelectProps['renderOption'] | MantineMultiSelectProps['renderOption'] = useCallback(
       ({ option, ...others }: { option: ComboboxItem; [key: string]: any }) => {
+        // Manually check if option is selected for multi-select mode
+        const isSelected = multiple && Array.isArray(value) ? value.includes(option.value) : false;
         if (option.value === '__loading__') {
           return (
             <Group gap="xs" {...others}>
@@ -146,13 +180,30 @@ export const AsyncPaginateSelect = forwardRef<
           return renderOption({ option, ...others });
         }
 
+        // Default render with checkmark for selected items in multi-select mode
+        if (multiple && isSelected) {
+          return (
+            <Group flex="1" gap="xs" {...others}>
+              <Text size="sm">{option.label}</Text>
+              <Text
+                size="sm"
+                c="blue"
+                fw={700}
+                style={{ marginInlineStart: 'auto', fontSize: rem(16) }}
+              >
+                ✓
+              </Text>
+            </Group>
+          );
+        }
+
         return (
           <Text size="sm" {...others}>
             {option.label}
           </Text>
         );
       },
-      [loadMore, loadingMessage, renderOption, onLoadMore]
+      [loadMore, loadingMessage, renderOption, onLoadMore, multiple, value]
     );
 
     // Handle option selection
@@ -261,7 +312,7 @@ export const AsyncPaginateSelect = forwardRef<
           onDropdownClose?.();
           dropdownRef.current = null;
         }}
-        rightSection={loading && options.length === 0 ? <Loader size="xs" /> : undefined}
+        rightSection={loading && options?.length === 0 ? <Loader size="xs" /> : undefined}
         {...selectRest}
       />
     );

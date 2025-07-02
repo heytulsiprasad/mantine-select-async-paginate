@@ -50,8 +50,8 @@
     "react-dom": ">=18.0.0"
   },
   "devDependencies": {
-    "@mantine/core": "^7.17.8",
-    "@mantine/hooks": "^7.17.8",
+    "@mantine/core": "^8.1.2",
+    "@mantine/hooks": "^8.1.2",
     "@storybook/addon-essentials": "^8.5.1",
     "@storybook/addon-interactions": "^8.5.1",
     "@storybook/addon-links": "^8.5.1",
