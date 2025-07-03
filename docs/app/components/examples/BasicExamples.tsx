@@ -155,9 +155,10 @@ const loadOptions = async (search, loadedOptions, additional) => {
             defaultOptions
             cacheOptions
             clearable
-            maxSelectedValues={5}
+            // maxSelectedValues={5}
             excludeSelected={true}
-            description="Select up to 5 options. Selected items are excluded from dropdown."
+            maxDisplayedValues={2}
+            description="Select up to 5 options. Only first 3 shown, rest as +N more"
           />
 
           {multiValue.length > 0 && (
@@ -174,6 +175,7 @@ const loadOptions = async (search, loadedOptions, additional) => {
   loadOptions={loadOptions}
   maxSelectedValues={5}
   excludeSelected={true}
+  maxDisplayedValues={3}
   defaultOptions
   cacheOptions
 />`}</Code>
@@ -204,7 +206,8 @@ const loadOptions = async (search, loadedOptions, additional) => {
             clearable
             maxSelectedValues={4}
             excludeSelected={true}
-            description="Using the multiple prop to enable multi-selection"
+            maxDisplayedValues={2}
+            description="Using multiple prop. Shows 2 items max, rest as +N more"
           />
 
           {multipleMode.length > 0 && (

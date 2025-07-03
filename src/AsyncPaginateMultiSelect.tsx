@@ -1,4 +1,4 @@
-import { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import { forwardRef, useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import {
   MultiSelect,
   MultiSelectProps,
@@ -35,11 +35,17 @@ export const AsyncPaginateMultiSelect = forwardRef<
       onLoadMore,
       maxSelectedValues,
       excludeSelected = true,
+      maxDisplayedValues,
+      pillStyles,
+      pillClassName,
+      hiddenCountStyles,
+      hiddenCountClassName,
       ...rest
     },
     ref
   ) => {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
+    const multiSelectRef = useRef<HTMLDivElement | null>(null);
     const [selectedOptionsMap, setSelectedOptionsMap] = useState<Record<string, ComboboxItem>>({});
     const {
       options,
@@ -224,9 +230,71 @@ export const AsyncPaginateMultiSelect = forwardRef<
     // Check if max selections reached
     const isMaxReached = maxSelectedValues && value && value.length >= maxSelectedValues;
 
+    // Calculate how many values to display and how many are hidden
+    const hiddenCount = useMemo(() => {
+      if (!maxDisplayedValues || !value || value.length <= maxDisplayedValues) {
+        return 0;
+      }
+      return value.length - maxDisplayedValues;
+    }, [maxDisplayedValues, value]);
+
+    // Use effect to manipulate pills after render
+    useEffect(() => {
+      if (!maxDisplayedValues || !value || value.length <= maxDisplayedValues) return;
+      
+      // Find the MultiSelect input element
+      const inputElement = multiSelectRef.current || document.querySelector('.mantine-MultiSelect-root');
+      if (!inputElement) return;
+      
+      // Find all pills
+      const pills = inputElement.querySelectorAll('.mantine-MultiSelect-pill');
+      
+      // Hide pills beyond maxDisplayedValues
+      pills.forEach((pill, index) => {
+        if (index >= maxDisplayedValues) {
+          (pill as HTMLElement).style.display = 'none';
+        }
+      });
+      
+      // Check if we already added the count indicator
+      const existingIndicator = inputElement.querySelector('.mantine-MultiSelect-hidden-count');
+      if (!existingIndicator && hiddenCount > 0) {
+        // Create and insert the hidden count indicator
+        const lastVisiblePill = pills[maxDisplayedValues - 1];
+        if (lastVisiblePill && lastVisiblePill.parentElement) {
+          const indicator = document.createElement('div');
+          indicator.className = 'mantine-MultiSelect-hidden-count';
+          indicator.textContent = `+${hiddenCount} more`;
+          indicator.style.cssText = `
+            display: inline-flex;
+            align-items: center;
+            padding: 0 8px;
+            height: 24px;
+            border-radius: 12px;
+            background-color: var(--mantine-color-gray-2);
+            color: var(--mantine-color-gray-7);
+            font-size: 0.875rem;
+            margin-left: 4px;
+          `;
+          if (hiddenCountStyles) {
+            Object.assign(indicator.style, hiddenCountStyles);
+          }
+          if (hiddenCountClassName) {
+            indicator.className += ` ${hiddenCountClassName}`;
+          }
+          lastVisiblePill.parentElement.insertBefore(indicator, lastVisiblePill.nextSibling);
+        }
+      } else if (existingIndicator) {
+        // Update existing indicator
+        existingIndicator.textContent = `+${hiddenCount} more`;
+      }
+    }, [value, maxDisplayedValues, hiddenCount, hiddenCountStyles, hiddenCountClassName]);
+
+
     return (
-      <MultiSelect
-        ref={ref}
+      <Box ref={multiSelectRef as any}>
+        <MultiSelect
+          ref={ref}
         value={value || []}
         onChange={handleChange}
         data={selectData}
@@ -236,6 +304,13 @@ export const AsyncPaginateMultiSelect = forwardRef<
         nothingFoundMessage={nothingFoundMessage}
         renderOption={customRenderOption}
         disabled={isMaxReached || rest.disabled}
+        styles={{
+          ...((typeof rest.styles === 'object' ? rest.styles : {}) || {}),
+        }}
+        classNames={{
+          ...((typeof rest.classNames === 'object' ? rest.classNames : {}) || {}),
+          ...(pillClassName ? { pill: pillClassName } : {}),
+        }}
         onDropdownOpen={() => {
           onDropdownOpen?.();
           // Set ref to dropdown when it opens
@@ -254,7 +329,8 @@ export const AsyncPaginateMultiSelect = forwardRef<
         }}
         rightSection={loading && options?.length === 0 ? <Loader size="xs" /> : undefined}
         {...rest}
-      />
+        />
+      </Box>
     );
   }
 );

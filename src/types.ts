@@ -43,6 +43,13 @@ interface BaseAsyncPaginateProps<Additional = any> {
   // Multi-select specific props
   maxSelectedValues?: number;
   excludeSelected?: boolean;
+  maxDisplayedValues?: number;
+  
+  // Pill customization
+  pillStyles?: React.CSSProperties;
+  pillClassName?: string;
+  hiddenCountStyles?: React.CSSProperties;
+  hiddenCountClassName?: string;
 }
 
 // Single select props
