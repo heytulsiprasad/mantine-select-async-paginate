@@ -1,6 +1,6 @@
 {
   "name": "mantine-select-async-paginate",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Async paginate select component for Mantine UI",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
