@@ -47,14 +47,7 @@ export const AsyncPaginateMultiSelect = forwardRef<
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const multiSelectRef = useRef<HTMLDivElement | null>(null);
     const [selectedOptionsMap, setSelectedOptionsMap] = useState<Record<string, ComboboxItem>>({});
-    const {
-      options,
-      loading,
-      error,
-      hasMore,
-      loadMore,
-      handleSearch,
-    } = useAsyncOptions({
+    const asyncOptionsResult = useAsyncOptions({
       loadOptions,
       defaultOptions,
       cacheOptions,
@@ -62,6 +55,15 @@ export const AsyncPaginateMultiSelect = forwardRef<
       additional,
       minSearchLength,
     });
+
+    const {
+      options = [],
+      loading = false,
+      error = null,
+      hasMore = false,
+      loadMore = () => {},
+      handleSearch = () => {},
+    } = asyncOptionsResult || {};
 
     // Handle dropdown scroll for infinite loading
     const handleScroll = useCallback(() => {
@@ -89,6 +91,8 @@ export const AsyncPaginateMultiSelect = forwardRef<
 
     // Update selected options map whenever options change
     useEffect(() => {
+      if (!options || !Array.isArray(options)) return;
+      
       const newMap = { ...selectedOptionsMap };
       options.forEach(option => {
         newMap[option.value] = option;
@@ -100,13 +104,15 @@ export const AsyncPaginateMultiSelect = forwardRef<
     const selectedOptions: ComboboxItem[] = [];
     const unselectedOptions: ComboboxItem[] = [];
 
-    options.forEach(option => {
-      if (value && value.includes(option.value)) {
-        selectedOptions.push(option);
-      } else {
-        unselectedOptions.push(option);
-      }
-    });
+    if (options && Array.isArray(options)) {
+      options.forEach(option => {
+        if (value && value.includes(option.value)) {
+          selectedOptions.push(option);
+        } else {
+          unselectedOptions.push(option);
+        }
+      });
+    }
 
     // Add any selected values that might not be in current options
     if (value && value.length > 0) {
@@ -119,13 +125,21 @@ export const AsyncPaginateMultiSelect = forwardRef<
 
     // Prepare data for MultiSelect component
     // Always show selected items at the top
-    const selectData: ComboboxItem[] = [
-      ...selectedOptions,
-      ...unselectedOptions
-    ];
+    let selectData: ComboboxItem[] = [];
+    
+    try {
+      selectData = [
+        ...(selectedOptions || []),
+        ...(unselectedOptions || [])
+      ];
+    } catch (e) {
+      console.error('Error creating selectData:', e);
+      selectData = [];
+    }
+
 
     // Add loading indicator at the end
-    if (loading && options.length > 0) {
+    if (loading && options && options.length > 0) {
       selectData.push({
         value: '__loading__',
         label: loadingMessage,
@@ -141,6 +155,14 @@ export const AsyncPaginateMultiSelect = forwardRef<
         disabled: false,
       });
     }
+
+    // Validate all items have required properties
+    selectData = selectData.filter(item => 
+      item && 
+      typeof item === 'object' && 
+      'value' in item && 
+      'label' in item
+    );
 
     // Custom render option
     const customRenderOption: MultiSelectProps['renderOption'] = useCallback(
@@ -299,9 +321,8 @@ export const AsyncPaginateMultiSelect = forwardRef<
         onChange={handleChange}
         data={selectData}
         searchable
-        searchValue={undefined}
         onSearchChange={handleSearch}
-        nothingFoundMessage={nothingFoundMessage}
+        nothingFoundMessage={nothingFoundMessage || ''}
         renderOption={customRenderOption}
         disabled={isMaxReached || rest.disabled}
         styles={{
