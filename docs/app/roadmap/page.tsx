@@ -169,7 +169,7 @@ export default function RoadmapPage() {
                   <Text>Virtualization support for rendering thousands of options efficiently</Text>
                 </List.Item>
                 <List.Item>
-                  <Text>Infinite scroll instead of "Load more" button option</Text>
+                  <Text>Infinite scroll instead of &quot;Load more&quot; button option</Text>
                 </List.Item>
                 <List.Item>
                   <Text>Better accessibility with ARIA announcements</Text>
@@ -260,7 +260,7 @@ export default function RoadmapPage() {
           <Title order={2} mb="md">Contributing</Title>
           
           <Text mb="md">
-            We welcome contributions! Here's how you can help:
+            We welcome contributions! Here&apos;s how you can help:
           </Text>
           
           <List spacing="md">
@@ -304,7 +304,7 @@ export default function RoadmapPage() {
         <Alert icon={<IconRocket size="1rem" />} color="blue" variant="light">
           <Text fw={500} mb="xs">Have a feature request?</Text>
           <Text size="sm">
-            We'd love to hear your ideas! Please open a discussion on GitHub or reach out to the maintainers.
+            We&apos;d love to hear your ideas! Please open a discussion on GitHub or reach out to the maintainers.
             Your feedback helps shape the future of this library.
           </Text>
         </Alert>

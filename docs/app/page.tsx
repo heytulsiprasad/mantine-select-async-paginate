@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Title, Text, Paper, Stack, Group, Badge, Button, Code, List, Anchor, Grid, Card, Highlight } from '@mantine/core';
+import { Container, Title, Text, Paper, Stack, Group, Badge, Button, Code, Anchor, Grid, Card } from '@mantine/core';
 import { IconBook, IconCode, IconRocket, IconBrandGithub, IconBrandNpm, IconExternalLink, IconCheck } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -61,7 +61,7 @@ export default function Home() {
             <Badge variant="light" color="green">Latest: v0.2.0</Badge>
           </Group>
           
-          <Code block size="lg" mb="md">
+          <Code block mb="md">
             npm install mantine-select-async-paginate
           </Code>
           
@@ -245,7 +245,7 @@ export default function Home() {
                 Upcoming features, improvements, and community contributions.
               </Text>
               <Badge variant="light" color="purple" size="sm">
-                What's Next
+                What&apos;s Next
               </Badge>
             </Card>
           </Grid.Col>

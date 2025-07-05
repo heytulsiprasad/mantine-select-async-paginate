@@ -40,7 +40,7 @@ export function BasicExamples() {
   // Basic load options function
   const loadOptions = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { page: number }
   ): Promise<LoadOptionsResult<{ page: number }>> => {
     // Simulate API delay

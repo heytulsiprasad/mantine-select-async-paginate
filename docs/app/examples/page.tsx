@@ -1,16 +1,10 @@
 'use client';
 
-import { useState } from 'react';
-import { Container, Title, Text, Tabs, Paper, Stack, Code, Group, Badge, Alert } from '@mantine/core';
+import { Container, Title, Text, Paper, Stack, Code, Group, Badge, Alert } from '@mantine/core';
 import { IconInfoCircle, IconUsers, IconShoppingCart, IconBrandGithub, IconSettings } from '@tabler/icons-react';
 import { BasicExamples } from '../components/examples/BasicExamples';
-import { ApiExamples } from '../components/examples/ApiExamples';
-import { AdvancedExamples } from '../components/examples/AdvancedExamples';
-import { CustomizationExamples } from '../components/examples/CustomizationExamples';
 
 export default function ExamplesPage() {
-  const [activeTab, setActiveTab] = useState<string | null>('basic');
-
   return (
     <Container size="xl" py="xl">
       <Stack gap="xl">

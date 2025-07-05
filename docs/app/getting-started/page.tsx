@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Title, Text, Paper, Stack, Code, Badge, List, Group, Alert, Anchor } from '@mantine/core';
+import { Container, Title, Text, Paper, Stack, Code, List, Group, Alert, Anchor } from '@mantine/core';
 import { IconInfoCircle, IconCheck, IconPackage, IconCode, IconRocket } from '@tabler/icons-react';
 import Link from 'next/link';
 
@@ -105,7 +105,7 @@ function App() {
           </Group>
           
           <Text mb="md">
-            Here's a simple example to get you started with AsyncPaginateSelect:
+            Here&apos;s a simple example to get you started with AsyncPaginateSelect:
           </Text>
           
           <Code block>{`import { useState } from 'react';

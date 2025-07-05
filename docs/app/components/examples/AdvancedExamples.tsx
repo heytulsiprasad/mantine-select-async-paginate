@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import { Stack, Title, Text, Paper, Group, Code, Alert, Badge, Switch, NumberInput } from '@mantine/core';
+import { Stack, Title, Text, Paper, Group, Code, Alert, Badge, Switch, NumberInput, ComboboxItem, ComboboxLikeRenderOptionInput } from '@mantine/core';
 import { IconSettings, IconInfoCircle, IconRocket, IconBolt } from '@tabler/icons-react';
 import { AsyncPaginateSelect, AsyncPaginateMultiSelect, LoadOptionsResult } from 'mantine-select-async-paginate';
 
@@ -24,7 +24,7 @@ export function AdvancedExamples() {
   // Advanced load options with custom additional data
   const loadAdvancedOptions = useCallback(async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { 
       page: number; 
       timestamp: number; 
@@ -83,7 +83,7 @@ export function AdvancedExamples() {
   // JSONPlaceholder posts with custom additional tracking
   const loadJsonPlaceholderPosts = useCallback(async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { start: number; requestCount: number }
   ): Promise<LoadOptionsResult<{ start: number; requestCount: number }>> => {
     const currentStart = additional?.start || 0;
@@ -98,17 +98,22 @@ export function AdvancedExamples() {
       
       // Client-side search if search term provided
       const filteredPosts = search 
-        ? posts.filter((post: any) => 
+        ? posts.filter((post: { title: string; body: string }) => 
             post.title.toLowerCase().includes(search.toLowerCase()) ||
             post.body.toLowerCase().includes(search.toLowerCase())
           )
         : posts;
 
       return {
-        options: filteredPosts.map((post: any) => ({
+        options: filteredPosts.map((post: { id: number; title: string; body: string }) => ({
           value: post.id.toString(),
           label: post.title,
           description: post.body.slice(0, 80) + '...',
+          data: {
+            category: 'Post',
+            priority: post.id % 3 === 0 ? 'High' : post.id % 2 === 0 ? 'Medium' : 'Low',
+            created: new Date(Date.now() - Math.random() * 10000000000).toISOString()
+          }
         })),
         hasMore: posts.length === limit, // If we got full limit, there might be more
         additional: { 
@@ -123,8 +128,10 @@ export function AdvancedExamples() {
   }, []);
 
   // Custom render option function
-  const customRenderOption = useCallback(({ option, ...others }: any) => {
-    const data = option.data;
+  const customRenderOption = useCallback((item: ComboboxLikeRenderOptionInput<ComboboxItem>) => {
+    const { option, ...others } = item;
+    const optionWithData = option as ComboboxItem & { data?: { category: string; priority: string; created: string } };
+    const data = optionWithData.data;
     if (!data) return <div {...others}>{option.label}</div>;
     
     return (

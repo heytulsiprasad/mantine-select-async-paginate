@@ -19,7 +19,7 @@ export function ApiExamples() {
   // DummyJSON Users API (Multi-select)
   const loadDummyUsers = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { skip: number }
   ): Promise<LoadOptionsResult<{ skip: number }>> => {
     const currentSkip = additional?.skip || 0;
@@ -36,7 +36,7 @@ export function ApiExamples() {
       const data = await response.json();
 
       return {
-        options: data.users.map((user: any) => ({
+        options: data.users.map((user: { id: number; firstName: string; lastName: string; email: string }) => ({
           value: user.id.toString(),
           label: `${user.firstName} ${user.lastName}`,
           description: user.email,
@@ -53,7 +53,7 @@ export function ApiExamples() {
   // DummyJSON Products API (Single-select)
   const loadDummyProducts = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { skip: number }
   ): Promise<LoadOptionsResult<{ skip: number }>> => {
     const currentSkip = additional?.skip || 0;
@@ -70,7 +70,7 @@ export function ApiExamples() {
       const data = await response.json();
 
       return {
-        options: data.products.map((product: any) => ({
+        options: data.products.map((product: { id: number; title: string; price: number; brand: string; category: string }) => ({
           value: product.id.toString(),
           label: `${product.title} - $${product.price}`,
           description: `${product.brand} | ${product.category}`,
@@ -87,7 +87,7 @@ export function ApiExamples() {
   // ReqRes Users API (Multi-select)
   const loadReqresUsers = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { page: number }
   ): Promise<LoadOptionsResult<{ page: number }>> => {
     const currentPage = additional?.page || 1;
@@ -114,14 +114,14 @@ export function ApiExamples() {
       
       // Client-side search filtering since ReqRes doesn't support search
       if (search) {
-        filteredUsers = data.data.filter((user: any) =>
+        filteredUsers = data.data.filter((user: { first_name: string; last_name: string; email: string }) =>
           `${user.first_name} ${user.last_name}`.toLowerCase().includes(search.toLowerCase()) ||
           user.email.toLowerCase().includes(search.toLowerCase())
         );
       }
 
       return {
-        options: filteredUsers.map((user: any) => ({
+        options: filteredUsers.map((user: { id: number; first_name: string; last_name: string; email: string }) => ({
           value: user.id.toString(),
           label: `${user.first_name} ${user.last_name}`,
           description: user.email,
@@ -138,7 +138,7 @@ export function ApiExamples() {
   // GitHub Repositories API (Single-select)
   const loadGithubRepos = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { page: number }
   ): Promise<LoadOptionsResult<{ page: number }>> => {
     const currentPage = additional?.page || 1;
@@ -154,7 +154,7 @@ export function ApiExamples() {
       const data = await response.json();
 
       return {
-        options: data.items.map((repo: any) => ({
+        options: data.items.map((repo: { id: number; full_name: string; stargazers_count: number; description?: string }) => ({
           value: repo.id.toString(),
           label: repo.full_name,
           description: `⭐ ${repo.stargazers_count} | ${repo.description?.slice(0, 60)}...`,
@@ -342,7 +342,7 @@ const loadDummyProducts = async (search, loadedOptions, additional) => {
               
               <Text size="sm" c="dimmed">
                 Clean user data from ReqRes.in with page-based pagination. 
-                Search is handled client-side since the API doesn't support search parameters.
+                Search is handled client-side since the API doesn&apos;t support search parameters.
               </Text>
 
               <AsyncPaginateMultiSelect

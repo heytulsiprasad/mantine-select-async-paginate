@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Title, Text, Paper, Stack, Code, Badge, Table, Tabs, Alert, Group, List } from '@mantine/core';
+import { Container, Title, Text, Paper, Stack, Code, Badge, Table, Tabs, Alert, List } from '@mantine/core';
 import { IconCode, IconInfoCircle, IconBox, IconFunction, IconSettings } from '@tabler/icons-react';
 
 export default function ApiReferencePage() {
@@ -142,21 +142,21 @@ export default function ApiReferencePage() {
                       <Table.Tr>
                         <Table.Td><Code>loadingMessage</Code></Table.Td>
                         <Table.Td><Code>string</Code></Table.Td>
-                        <Table.Td><Code>"Loading..."</Code></Table.Td>
+                        <Table.Td><Code>&quot;Loading...&quot;</Code></Table.Td>
                         <Table.Td>Message shown while loading</Table.Td>
                       </Table.Tr>
                       
                       <Table.Tr>
                         <Table.Td><Code>noOptionsMessage</Code></Table.Td>
                         <Table.Td><Code>string</Code></Table.Td>
-                        <Table.Td><Code>"No options"</Code></Table.Td>
+                        <Table.Td><Code>&quot;No options&quot;</Code></Table.Td>
                         <Table.Td>Message shown when no options found</Table.Td>
                       </Table.Tr>
                       
                       <Table.Tr>
                         <Table.Td><Code>loadMoreText</Code></Table.Td>
                         <Table.Td><Code>string</Code></Table.Td>
-                        <Table.Td><Code>"Load more..."</Code></Table.Td>
+                        <Table.Td><Code>&quot;Load more...&quot;</Code></Table.Td>
                         <Table.Td>Text for load more button</Table.Td>
                       </Table.Tr>
                       
@@ -224,7 +224,7 @@ export default function ApiReferencePage() {
                     <Code>value</Code> is always <Code>string[]</Code>
                   </List.Item>
                   <List.Item>
-                    <Code>onChange</Code> receives <Code>(values: string[]) => void</Code>
+                    <Code>onChange</Code> receives <Code>(values: string[]) =&gt; void</Code>
                   </List.Item>
                   <List.Item>
                     <Code>maxSelectedValues</Code> and <Code>excludeSelected</Code> are commonly used

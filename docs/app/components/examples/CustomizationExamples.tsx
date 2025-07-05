@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Stack, Title, Text, Paper, Group, Code, Alert, Badge, ColorInput, Select, NumberInput, Switch, Textarea } from '@mantine/core';
+import { Stack, Title, Text, Paper, Group, Code, Alert, Badge, ColorInput, Select, Textarea, ComboboxItem, ComboboxLikeRenderOptionInput } from '@mantine/core';
 import { IconPalette, IconInfoCircle, IconAdjustments, IconBrush } from '@tabler/icons-react';
 import { AsyncPaginateSelect, AsyncPaginateMultiSelect, LoadOptionsResult } from 'mantine-select-async-paginate';
 
@@ -16,7 +16,6 @@ export function CustomizationExamples() {
   const [variant, setVariant] = useState<string>('default');
   const [size, setSize] = useState<string>('md');
   const [radius, setRadius] = useState<string>('sm');
-  const [withBorder, setWithBorder] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState('Loading awesome options...');
   const [noOptionsMessage, setNoOptionsMessage] = useState('No options found');
   const [loadMoreText, setLoadMoreText] = useState('Load more items');
@@ -24,7 +23,7 @@ export function CustomizationExamples() {
   // Color-themed data generator
   const generateThemedData = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { page: number }
   ): Promise<LoadOptionsResult<{ page: number }>> => {
     await new Promise(resolve => setTimeout(resolve, 600));
@@ -74,7 +73,7 @@ export function CustomizationExamples() {
   // Simple themed data for basic customization
   const loadBasicThemedData = async (
     search: string,
-    loadedOptions: any[],
+    loadedOptions: unknown[],
     additional?: { page: number }
   ): Promise<LoadOptionsResult<{ page: number }>> => {
     await new Promise(resolve => setTimeout(resolve, 400));
@@ -109,8 +108,10 @@ export function CustomizationExamples() {
   };
 
   // Custom color-based render option
-  const colorRenderOption = ({ option, ...others }: any) => {
-    const data = option.data;
+  const colorRenderOption = (item: ComboboxLikeRenderOptionInput<ComboboxItem>) => {
+    const { option, ...others } = item;
+    const optionWithData = option as ComboboxItem & { data?: { hex: string; category: string } };
+    const data = optionWithData.data;
     if (!data) return <div {...others}>{option.label}</div>;
     
     return (
@@ -141,7 +142,7 @@ export function CustomizationExamples() {
         <Title order={2} mb="md">Customization & Theming</Title>
         <Text c="dimmed" mb="xl">
           Explore extensive customization options including styling, theming, messages, 
-          and custom rendering to match your application's design system.
+          and custom rendering to match your application&apos;s design system.
         </Text>
       </div>
 
@@ -185,11 +186,6 @@ export function CustomizationExamples() {
           </Group>
 
           <Group>
-            <Switch
-              label="With Border"
-              checked={withBorder}
-              onChange={(event) => setWithBorder(event.currentTarget.checked)}
-            />
           </Group>
 
           <Group grow>
@@ -247,10 +243,9 @@ export function CustomizationExamples() {
             defaultOptions
             cacheOptions
             clearable
-            variant={variant as any}
-            size={size as any}
-            radius={radius as any}
-            withBorder={withBorder}
+            variant={variant as 'default' | 'filled' | 'outline' | 'unstyled'}
+            size={size as 'xs' | 'sm' | 'md' | 'lg' | 'xl'}
+            radius={radius as 'xs' | 'sm' | 'md' | 'lg' | 'xl'}
             loadingMessage={loadingMessage}
             noOptionsMessage={noOptionsMessage}
             loadMoreText={loadMoreText}
@@ -280,7 +275,6 @@ export function CustomizationExamples() {
   variant="${variant}"
   size="${size}"
   radius="${radius}"
-  withBorder={${withBorder}}
   loadingMessage="${loadingMessage}"
   noOptionsMessage="${noOptionsMessage}"
   loadMoreText="${loadMoreText}"
@@ -333,10 +327,9 @@ export function CustomizationExamples() {
             clearable
             maxSelectedValues={6}
             excludeSelected={true}
-            variant={variant as any}
-            size={size as any}
-            radius={radius as any}
-            withBorder={withBorder}
+            variant={variant as 'default' | 'filled' | 'outline' | 'unstyled'}
+            size={size as 'xs' | 'sm' | 'md' | 'lg' | 'xl'}
+            radius={radius as 'xs' | 'sm' | 'md' | 'lg' | 'xl'}
             loadingMessage={loadingMessage}
             noOptionsMessage={noOptionsMessage}
             loadMoreText={loadMoreText}
@@ -472,7 +465,6 @@ const colorRenderOption = ({ option, ...others }) => {
           <Badge variant="light">variant</Badge>
           <Badge variant="light">size</Badge>
           <Badge variant="light">radius</Badge>
-          <Badge variant="light">withBorder</Badge>
           <Badge variant="light">leftSection</Badge>
           <Badge variant="light">rightSection</Badge>
           <Badge variant="light">styles</Badge>
@@ -494,7 +486,6 @@ const colorRenderOption = ({ option, ...others }) => {
   variant="filled"
   size="lg"
   radius="md"
-  withBorder={false}
   
   // Sections
   leftSection={<IconSearch size="1rem" />}
@@ -528,10 +519,10 @@ const colorRenderOption = ({ option, ...others }) => {
       <Paper shadow="sm" p="lg" withBorder>
         <Title order={3} mb="md">Styling Best Practices</Title>
         <Stack gap="sm">
-          <Text><strong>Use Mantine's Design System:</strong> Leverage built-in variants, sizes, and themes</Text>
+          <Text><strong>Use Mantine&apos;s Design System:</strong> Leverage built-in variants, sizes, and themes</Text>
           <Text><strong>Custom Styles:</strong> Use the styles prop for component-specific customization</Text>
-          <Text><strong>CSS-in-JS:</strong> Utilize Mantine's emotion-based styling system</Text>
-          <Text><strong>Theme Integration:</strong> Align with your application's color scheme</Text>
+          <Text><strong>CSS-in-JS:</strong> Utilize Mantine&apos;s emotion-based styling system</Text>
+          <Text><strong>Theme Integration:</strong> Align with your application&apos;s color scheme</Text>
           <Text><strong>Responsive Design:</strong> Consider different screen sizes for mobile</Text>
           <Text><strong>Accessibility:</strong> Maintain proper contrast ratios and focus states</Text>
           <Text><strong>Performance:</strong> Use CSS variables for dynamic theming</Text>
